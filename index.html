@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudyLoop｜高校生の質問掲示板</title>
+<style>
+  :root { --bg:#f5f7ff; --card:#fff; --text:#1c2340; --sub:#5b6585; --main:#4f46e5; --ok:#10b981; --line:#e2e6f5; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#12152a; --card:#1c2040; --text:#eef0ff; --sub:#a3abd0; --line:#2d3260; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+  header { background:var(--main); color:#fff; padding:14px 16px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; }
+  header h1 { margin:0; font-size:1.25rem; }
+  nav a { color:#fff; margin-left:12px; text-decoration:none; font-size:.9rem; }
+  main { max-width:720px; margin:0 auto; padding:16px; }
+  section { margin-bottom:28px; }
+  h2 { font-size:1.1rem; border-left:5px solid var(--main); padding-left:8px; }
+  .hero { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .tag { border:1px solid var(--main); background:transparent; color:var(--main); border-radius:999px; padding:8px 16px; font-size:.95rem; cursor:pointer; }
+  .tag.active { background:var(--main); color:#fff; }
+  .post { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin:10px 0; }
+  .meta { color:var(--sub); font-size:.85rem; }
+  .badge { font-size:.8rem; border-radius:6px; padding:2px 8px; margin-right:6px; background:var(--line); }
+  .solved { background:var(--ok); color:#fff; }
+  .countdown { background:var(--card); border:2px dashed var(--main); border-radius:12px; padding:12px; }
+  .card { background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; border-radius:14px; padding:14px; margin:10px 0; }
+  .card button, .btn { background:#fff; color:var(--main); border:0; border-radius:999px; padding:10px 18px; font-size:1rem; cursor:pointer; }
+  .btn.primary { background:var(--main); color:#fff; }
+  ul.rules li { margin-bottom:4px; }
+  footer { text-align:center; color:var(--sub); font-size:.8rem; padding:24px; }
+  [hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>StudyLoop</h1>
+  <nav><a href="#questions">質問一覧</a><a href="#cards">解決カード</a><a href="#rules">使い方</a></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h2 style="border:0;padding:0">わからないを、みんなの「わかった」に。</h2>
+    <p>匿名で気軽に質問できて、解決した内容は「解決カード」として残る。高校生のための勉強掲示板です。</p>
+    <a class="btn primary" href="#questions">質問を見る</a>
+  </section>
+
+  <section>
+    <h2>テスト前モード</h2>
+    <div class="countdown">数学Ⅱ ： <strong id="days">あと3日</strong>　／　英語表現 ： <strong>あと5日</strong></div>
+  </section>
+
+  <section id="questions">
+    <h2>質問一覧</h2>
+    <div class="tags" id="tags">
+      <button class="tag active" data-s="all">すべて</button>
+      <button class="tag" data-s="数学">数学</button>
+      <button class="tag" data-s="英語">英語</button>
+      <button class="tag" data-s="物理">物理</button>
+      <button class="tag" data-s="国語">国語</button>
+    </div>
+    <div id="list">
+      <div class="post" data-s="数学"><span class="badge">数学</span><strong>二次関数の最大値の求め方がわからない</strong>
+        <div class="meta">ニックネーム：ひなた ／ 未解決</div></div>
+      <div class="post" data-s="英語"><span class="badge">英語</span><strong>関係代名詞 who と which の使い分け</strong>
+        <div class="meta">ニックネーム：そら ／ <span class="badge solved">解決済み</span></div></div>
+      <div class="post" data-s="物理"><span class="badge">物理</span><strong>等加速度運動の式はどれを使う？</strong>
+        <div class="meta">ニックネーム：りく ／ 未解決</div></div>
+      <div class="post" data-s="国語"><span class="badge">国語</span><strong>古文の助動詞「べし」の意味の見分け方</strong>
+        <div class="meta">ニックネーム：みお ／ <span class="badge solved">解決済み</span></div></div>
+    </div>
+    <p class="meta">※質問の投稿機能は発展課題（Flask＋Table Storage）で実装予定です。</p>
+  </section>
+
+  <section id="cards">
+    <h2>解決カード</h2>
+    <div class="card">
+      <div class="meta" style="color:#e0e0ff">英語｜そら</div>
+      <p>「人なら who、物なら which。迷ったら先行詞が人か物かを見る」</p>
+      <button type="button" id="thanks">わかった！ <span id="count">12</span></button>
+    </div>
+    <div class="card">
+      <div class="meta" style="color:#e0e0ff">国語｜みお</div>
+      <p>「べしは『推量・意志・当然…』。直前の主語が自分なら意志を疑う」</p>
+    </div>
+  </section>
+
+  <section id="rules">
+    <h2>使い方・ルール</h2>
+    <ul class="rules">
+      <li>ニックネームだけで投稿できます。本名・学校名・連絡先は書かないでください。</li>
+      <li>解決したら質問者が「解決」を押して、一言まとめを書きます。</li>
+      <li>役に立った回答には「わかった！」を押しましょう。</li>
+      <li>悪口・個人情報・テストの不正行為につながる投稿は禁止です。</li>
+    </ul>
+  </section>
+</main>
+
+<footer>© StudyLoop｜HAL Tokyo 課題作品</footer>
+
+<script>
+  // 教科タグで絞り込み
+  document.getElementById('tags').addEventListener('click', function (e) {
+    var btn = e.target.closest('.tag');
+    if (!btn) return;
+    document.querySelectorAll('.tag').forEach(function (t) { t.classList.remove('active'); });
+    btn.classList.add('active');
+    var s = btn.dataset.s;
+    document.querySelectorAll('#list .post').forEach(function (p) {
+      p.hidden = !(s === 'all' || p.dataset.s === s);
+    });
+  });
+  // わかったスタンプ（ページ内だけの簡易デモ）
+  document.getElementById('thanks').addEventListener('click', function () {
+    var c = document.getElementById('count');
+    c.textContent = Number(c.textContent) + 1;
+  });
+</script>
+</body>
+</html>
